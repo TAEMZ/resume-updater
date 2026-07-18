@@ -1,0 +1,14 @@
+[
+  {
+    "id": 1784215317909,
+    "title": "Agent Scheduler",
+    "tech": "TypeScript · Node.js · Vitest",
+    "description": "Autonomous scheduling framework for AI agent tasks, featuring rate-limiting guardrails, task persistence, and backoff retries.",
+    "github_repo": "calm/agent-scheduler",
+    "github_url": "https://github.com/calm/agent-scheduler",
+    "stars": 42,
+    "status": "published",
+    "ai_reason": "Represents a real software development library/tool (scheduler framework) with specific tech stack.",
+    "synced_at": "2026-07-16T15:21:57.909Z"
+  }
+]
