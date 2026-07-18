@@ -12,6 +12,6 @@ jobs:
     steps:
       - name: Trigger Webhook
         run: |
-          curl -X POST "https://${{ secrets.PORTFOLIO_URL }}/api/sync-repo" \
+          curl -X POST "https://abiykibru.vercel.app/api/sync-repo" \
             -H "Content-Type: application/json" \
             -d '{"repo_url": "${{ github.event.repository.html_url }}"}'
