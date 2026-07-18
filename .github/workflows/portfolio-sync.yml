@@ -1,0 +1,17 @@
+name: Sync Project to Portfolio
+
+on:
+  push:
+    branches:
+      - main
+      - master
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Webhook
+        run: |
+          curl -X POST "https://portfolio-beta-sand-4j8jisvz6v.vercel.app/api/sync-repo" \
+            -H "Content-Type: application/json" \
+            -d '{"repo_url": "${{ github.event.repository.html_url }}"}'
