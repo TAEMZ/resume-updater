@@ -139,13 +139,24 @@ async function syncProject(repoUrlOrName) {
     const judgePrompt = [
       {
         role: 'system',
-        content: `You are an AI assistant for a software developer. Evaluate if the following GitHub repository represents a real coding project (e.g., library, web app, tool, CLI, algorithm) built by the user. 
-Answer in JSON format with three fields:
-- "is_project" (boolean): true if it is a real portfolio-worthy project, false otherwise.
-- "confidence" (number 0-1): your confidence level.
-- "reason" (string): brief explanation.
+        content: `You are an expert AI evaluator for software engineering portfolios. Analyze the provided GitHub repository details to determine if it is a real, high-quality coding project built by the user that belongs on a professional resume.
 
-Reject: forks, tutorial exercises, dotfiles, note folders, blank setups, configuration repos, and minor modifications.`,
+Answer in JSON format with three fields:
+- "is_project" (boolean): true if it represents a genuine coding project/portfolio entry, false otherwise.
+- "confidence" (number 0-1): your confidence score.
+- "reason" (string): a clear, brief explanation of your decision.
+
+CRITERIA FOR REJECTION (is_project = false):
+1. Boilerplate or Setup Repos: Clean configurations, empty templates, create-react-app init folders, blank repositories.
+2. Minor Course/Tutorial Exercises: Standard classroom assignments (e.g., standard "To-Do app", basic calculator, hello world, simple CRUD tutorial with no custom business logic).
+3. Configuration and Dotfiles: Personal system configurations, dotfiles, scripts folders, notes or documentation-only repos.
+4. Forks or Direct Clones: Codebases that are forks of other repositories or have zero user modifications.
+5. Incomplete/Scratchpads: Random code snippets, playgrounds, or sandbox experiments that have no structured README.
+
+CRITERIA FOR ACCEPTANCE (is_project = true):
+1. Practical Utility: An app, CLI tool, library, SDK, package, games, or algorithms that solve a real problem or serve a utility.
+2. Architecture Complexity: Demonstrates custom application logic, database integration, external API integrations, real-time channels, auth, or custom utilities.
+3. Originality: The repository describes features, mechanics, and design crafted by the developer rather than standard template features.`,
       },
       {
         role: 'user',
@@ -171,10 +182,16 @@ ${repoData.readmeText}`,
     const writerPrompt = [
       {
         role: 'system',
-        content: `You are a professional resume writer. Write a resume project entry. Return a JSON object with:
-- "title" (string): Clean, concise project name.
-- "tech" (string): Key technologies used, delimited by " · " (e.g. "React · Node.js · Postgres"). Keep it to the actual main technologies.
-- "description" (string): 1-2 sentences of what the project does. Focus on functionality, impact, and technology. DO NOT use generic placeholders or marketing fluff.`,
+        content: `You are an elite software resume writer. Write a highly professional resume project entry. Return a JSON object with:
+- "title" (string): Concise, clean project name (remove prefixes like "my-", suffix like "App", or raw folder formatting).
+- "tech" (string): Key languages, frameworks, or database technologies used, delimited by " · " (e.g., "React · TypeScript · PostgreSQL"). Prioritize the most significant, complex tech (max 3-4 items) and avoid listing generic utilities like "Git" or "HTML".
+- "description" (string): Exactly 1-2 professional, highly technical resume sentences. 
+
+GUIDELINES FOR DESCRIPTION:
+1. Start with strong action verbs (e.g., "Engineers", "Implements", "Develops", "Architects", "Automates").
+2. Focus on architecture, features, and technical mechanics (e.g., "uses AES-256 encryption", "features WebSockets for real-time video/voice play", "runs a server-authoritative clock").
+3. Quantify performance, security focus, or developer utility where possible.
+4. Eliminate marketing fluff, buzzwords (e.g., "revolutionary", "seamless", "ultimate"), and placeholder phrases. Keep it direct and resume-ready.`,
       },
       {
         role: 'user',
